@@ -1,0 +1,37 @@
+:root{
+    --primary-color: #3a77fc;
+    --secondary-color: #F2F2F6;
+    --tertiary-color: #858589;
+}
+
+
+.search-bar, .search-bar > input{
+    background-color: var(--secondary-color);
+    color: var(--tertiary-color);
+    border-radius: 20pt;
+    outline: none;
+    border: none;
+}
+
+.profile-pic{
+    background-color: var(--secondary-color);
+    border-radius: 50%;
+    color: var(--tertiary-color);
+}
+
+.button-style{
+    color: var(--primary-color);
+    text-decoration: none;
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+}  
+
+.button-disabled{
+    pointer-events: none;
+    opacity: 0.2; /* You can adjust the opacity to give a disabled appearance */
+}
+
+
+  
