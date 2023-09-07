@@ -31,6 +31,8 @@ const ADD_CONTACT = gql`
 function AddContact(props) {
   // Show or hide the page
   let { show, showEditPage } = props;
+  const storedData = localStorage.getItem('contacts');
+  const parsedStoredData = JSON.parse(storedData)
 
   // Variables to store form data
   const [contactName, setContactName] = useState({
@@ -38,12 +40,37 @@ function AddContact(props) {
     last_name: '',
   });
 
+  // Validate special characters
+  const specialCharacter = /[^a-zA-Z]/g;
+  const [validateFirstName, setValidateFirstName] = useState(true)
+  const [validateSecondName, setValidateSecondName] = useState(true)
+  
+  // Validate unique name  
+  let listOfNames = parsedStoredData.map(contact=>(contact.first_name+contact.last_name))
+  const [uniqueName, setUniqueName] = useState(true)
+
   const contactNameHandler = (e) => {
-    const word = e.target.value
-    const letterTyped = word[word.length-1]
-    console.log(letterTyped)
+    const name = e.target.value
+    // Validate special characters
+    if(e.target.id == "first-name") {
+        name.match(specialCharacter) ? setValidateFirstName(false) : setValidateFirstName(true)
+    } 
+    if(e.target.id == "last-name") {
+        name.match(specialCharacter) ? setValidateSecondName(false) : setValidateSecondName(true)
+    } 
     setContactName({ ...contactName, [e.target.name]: e.target.value });
-  };
+    };
+
+    // check if name is unique
+    useEffect(()=>{ 
+        let currentName = contactName.first_name+contactName.last_name
+        if(listOfNames.includes(currentName)){
+            setUniqueName(false)
+        } else {
+            setUniqueName(true)
+        }
+    },[contactName])
+
 
   // Seperate primary number and secondary number
   const [primaryNumber, setPrimaryNumber] = useState('');
@@ -81,11 +108,17 @@ function AddContact(props) {
   const textInputRef = useRef(null);
 
   useEffect(() => {
+    // To select first field
     if (textInputRef.current) {
       textInputRef.current.focus();
       textInputRef.current.select();
     }
-    setSecondaryNumbers([])
+    return( () => {
+        setSecondaryNumbers([])
+        setValidateFirstName(true)
+        setValidateSecondName(true)
+        setUniqueName(true)
+    })
   }, [show]);
 
   return (
@@ -109,7 +142,12 @@ function AddContact(props) {
             </div>
             <p className="col-2 px-4 d-flex"></p>
           </div>
-
+          <div>
+          <div className="row m-3">
+            <div className="col">
+              {!uniqueName ? <p className='my-0 validation'>This name has been taken!</p>: <p className='dummy my-0'></p>}
+            </div>
+          </div>
           <div className="row input-form p-2 m-3 px-4">
             <div className="col">
               <label className="mb-0 small-text" htmlFor="first-name">
@@ -125,8 +163,10 @@ function AddContact(props) {
                 required
               />
             </div>
+            {!validateFirstName?<p className='validation'>this field can't contain special character</p>:null}
           </div>
-
+          
+          </div>
           <div className="row input-form p-2 m-3 px-4">
             <div className="col">
               <label className="mb-0 small-text" htmlFor="last-name">
@@ -141,8 +181,8 @@ function AddContact(props) {
                 required
               />
             </div>
+            {!validateSecondName?<p className='validation'>this field can't contain special character</p>:null}
           </div>
-
           
 
           <div className="row input-form p-2 m-3 px-4">
@@ -195,8 +235,13 @@ function AddContact(props) {
 
           <div className="row px-4 mt-auto">
             <div className="col d-flex flex-column align-items-end justify-content-end">
-              <button type="submit" className="button-style">
+            
+              <button 
+                type="submit" 
+                className={`button-style ${!validateFirstName || !validateSecondName || !uniqueName ? 'not-valid':''}`}
+              >
                 <i className="fa-solid fa-paper-plane fa-2x"></i>
+                
                 <p>submit</p>
               </button>
             </div>

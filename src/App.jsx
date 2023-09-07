@@ -10,11 +10,17 @@ function App() {
     uri: "https://wpe-hiring.tokopedia.net/graphql",
   })
 
+  // List of contacts
+  const [listOfContacts, setListOfContacts] = useState([]);
+  const editContacts = (elem) => {
+    setListOfContacts(elem)
+  }
+
+  // Edit page
   const [editPage, setEditPage] = useState(false);
   const showEditPage = () => {
     setEditPage(prev => {
       let result = !prev;
-
       return result;
     });
   }
@@ -26,7 +32,11 @@ function App() {
 
         </div>
         <div className="row">
-          <ContactList showEditPage={showEditPage} show={!editPage}/>
+          <ContactList 
+            showEditPage={showEditPage} 
+            show={!editPage} 
+            editContacts={editContacts}
+          />
           <EditContact/>
           <AddContact showEditPage={showEditPage} show={editPage}/>
         </div>

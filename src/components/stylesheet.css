@@ -94,3 +94,18 @@
 .stretch-form{
     width: 100%;
 }
+
+.validation{
+    color:red;
+    font-weight: 600;
+    animation: 0.7s fadeIn ease-in-out forwards;
+}
+
+.not-valid{
+
+    color: var(--tertiary-color);
+    pointer-events: none;
+}
+.dummy{
+    height: 1.5em !important;
+}

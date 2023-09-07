@@ -1,4 +1,4 @@
-import react, {useState} from 'react';
+import react, {useState,useEffect} from 'react';
 import { useQuery, gql } from '@apollo/client';
 import 'bootstrap/dist/css/bootstrap.css';
 import "./stylesheet.css"
@@ -28,43 +28,93 @@ const GET_CONTACT_LIST = gql`
     }
   }
 `;
-/*
-    const { loading, error, data } = useQuery(GET_CONTACT_LIST,{
-        variables: {
-            "where":  {
-                "first_name": {"_like": "%John%" }
-            }
-        }
-    });
-*/
 
 function ContactList(props) {
-  let {showEditPage, show} = props;
-  const { loading, error, data } = useQuery(GET_CONTACT_LIST);
-  
-  const [currentPage, setCurrentPage] = useState(1);
+  // Received props from parents
+  let {showEditPage, show, editContacts} = props;
 
+  // Set search bar functionality
+  const [searchQuery, setSearchQuery] = useState("")  
+  const updateQuery = (e) => {
+    e.preventDefault()
+    const newSearchQuery = e.target.value;
+    setSearchQuery(newSearchQuery);
+  };
+
+  // Initialize GraphQL query
+  const { loading, error, data } = useQuery(GET_CONTACT_LIST,{
+    variables: {
+      "where": {
+        first_name: {"_like": `%${searchQuery}%`}
+      }
+    }
+  });
+  
+  // Store the first fetched data in local web API
+  useEffect(() => {
+    if (!localStorage.getItem('contacts') && !loading && !error && data) {
+      localStorage.setItem('contacts', JSON.stringify(data.contact));
+    }
+  }, [data]);
+
+  // Set pagination function
+  const [currentPage, setCurrentPage] = useState(1);
   const nextPage = () => {
     setCurrentPage(prev => prev + 1);
   }
-
   const prevPage = () => {
     setCurrentPage(prev => prev - 1);
   }
 
+  // Set favorite
   let isFavorite = 0;
 
-  if (loading) return <p>'Loading...'</p>;
+  // If 'loading' return common elements
+  if (loading) return (
+    <div className='col-12 col-md-6 contact-list'>
+      <div className="row mt-1">
+        <h2 className="col display-4 d-flex align-items-center">
+          Contacts
+        </h2>
+        <div className="col d-flex justify-content-end">
+          <button className='d-flex flex-column align-items-center button-style'>
+            <i className="fa-solid fa-plus display-5"></i>
+            <span>Add</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="row mt-3">
+        <div className="col search-bar d-flex align-items-center gap-2">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input 
+            type="text" 
+            placeholder="Search" 
+            aria-label="Search"
+            value={searchQuery}
+            onChange={updateQuery}
+          />
+        </div>      
+      </div>
+    </div>
+  );
+  
+
+  // If 'error' return errpr
   if (error) return <p>`Error! ${error.message}`</p>;
-  // Data is loaded
-  // add favorite for each data contact
+  //Data loaded, proceed with logic
   let contactData = data.contact.map(e => ({
     ...e,
     "isFavorite":false
     })
   )
-  
   const contacts = data.contact.slice((currentPage-1)*10,currentPage*10);
+  
+  // Show edit page and send contact data to parent
+  const updateData = () => {
+    showEditPage();
+    editContacts(contactData)
+  }
 
   return(
     <>
@@ -75,7 +125,7 @@ function ContactList(props) {
               Contacts
             </h2>
             <div className="col d-flex justify-content-end">
-              <button className='d-flex flex-column align-items-center button-style' onClick={showEditPage}>
+              <button className='d-flex flex-column align-items-center button-style' onClick={updateData}>
                 <i className="fa-solid fa-plus display-5"></i>
                 <span>Add</span>
               </button>
@@ -85,7 +135,13 @@ function ContactList(props) {
           <div className="row mt-3">
             <div className="col search-bar d-flex align-items-center gap-2">
               <i class="fa-solid fa-magnifying-glass"></i>
-              <input type="text" placeholder="Search" aria-label="Search"/>
+              <input 
+                type="text" 
+                placeholder="Search" 
+                aria-label="Search"
+                value={searchQuery}
+                onChange={updateQuery}
+              />
             </div>      
           </div>
           {/*Map over the data*/}
@@ -135,46 +191,5 @@ function ContactList(props) {
       }
     </>
   )
-  /*
-  return (
-    <div>
-        <h2>Contact List</h2>
-        <ul>
-          {contacts.map((contact) => (
-            <li key={contact.id}>
-              <p>Name: {contact.first_name} {contact.last_name}</p>
-              <p>Phone Number: {contact.phones[0].number}</p>
-            </li>
-          ))}
-        </ul>
-    </div>  
-  )
-    {/*Map over the data}
-    <div className="row contact-list mt-4">
-    <div className="col-2 col-lg-1">
-      {/*Profile picture*}
-      <i class="fa-solid fa-user profile-pic p-2 fa-2x"></i>
-    </div>
-    <div className="col-8">
-      <div className="row full-name">
-        {/*First name + last name*}
-        <div className="col">
-          {contacts[0].first_name+' '+contacts[0].last_name}
-        </div>
-      </div>
-      <div className="row phone-number">
-        {/*Phone number/}
-        <div className="col">
-          {contacts[0].phones[0].number}
-        </div>
-      </div>
-    </div>
-  
-    <div className="col favorite d-flex justify-content-end align-items-center">
-      <i className={`button-style fa-star fa-2x fa-${isFavorite?'solid':'regular'}`}></i>
-    </div>
-  </div>
-  */
-
 }
 export default ContactList
