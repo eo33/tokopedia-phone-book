@@ -4,6 +4,26 @@
     --tertiary-color: #858589;
 }
 
+/*Simple animation*/
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+}
+
+@keyframes fadeInFromLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-100%); /* Start off-screen to the left */
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0); /* Move to the original position */
+    }
+}
 
 .search-bar, .search-bar > input{
     background-color: var(--secondary-color);
@@ -33,5 +53,44 @@
     opacity: 0.2; /* You can adjust the opacity to give a disabled appearance */
 }
 
+.black{
+    background-color: black;
+}
 
-  
+.add-contact{
+    border: solid 2px black;
+    border-radius: 20pt;
+    opacity: 0;
+    
+    animation: fadeInFromLeft 0.5s ease-in-out forwards;
+}
+
+.contact-list{
+    animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+.small-text{
+    font-size: small;
+}
+
+.large-text{
+    font-size: large;
+    color: var(--primary-color) !important
+}
+
+.x-large-text{
+    font-size: x-large;
+    color: var(--primary-color) !important
+}
+
+.input-form{
+    background-color: var(--secondary-color);
+    color: var(--tertiary-color);
+    border-radius: 20pt;
+    outline: none;
+    border: none;
+}
+
+.stretch-form{
+    width: 100%;
+}

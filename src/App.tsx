@@ -1,12 +1,23 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {ApolloClient, InMemoryCache,ApolloProvider} from '@apollo/client'
 import ContactList from './components/ContactList';
+import AddContact from './components/AddContact';
+import EditContact from './components/EditContact';
 
 function App() {
   const client = new ApolloClient({
     cache: new InMemoryCache(),
     uri: "https://wpe-hiring.tokopedia.net/graphql",
   })
+
+  const [editPage, setEditPage] = useState(false);
+  const showEditPage = () => {
+    setEditPage(prev => {
+      let result = !prev;
+
+      return result;
+    });
+  }
 
   return (
     <ApolloProvider client={client}>
@@ -15,10 +26,9 @@ function App() {
 
         </div>
         <div className="row">
-          <ContactList/>
-          <div className="col">
-            de
-          </div>
+          <ContactList showEditPage={showEditPage} show={!editPage}/>
+          <EditContact/>
+          <AddContact showEditPage={showEditPage} show={editPage}/>
         </div>
       </div>
   
