@@ -1,5 +1,4 @@
 import {useState,useEffect} from 'react';
-import Select from 'react-select';
 import { useMutation, gql } from '@apollo/client';
 import 'bootstrap/dist/css/bootstrap.css';
 import "./stylesheet.css"
@@ -21,7 +20,7 @@ function DeleteContact(props) {
 
   useEffect(() => {
     const localStorageData = JSON.parse(localStorage.getItem('contacts'));
-    if (localStorageData != null){
+    if (localStorageData !== null){
         const newDel = localStorageData;
         setDelContacts(newDel);
     }
@@ -32,7 +31,7 @@ function DeleteContact(props) {
   const handleDelete = (id) => {
     console.log('delete',id)
     // Delete in display
-    let newContacts = delContacts.filter(e => e.id != id)
+    let newContacts = delContacts.filter(e => e.id !== id)
     setDelContacts(newContacts)
     // Delete in web api
     localStorage.setItem('contacts',JSON.stringify(newContacts))
@@ -85,7 +84,7 @@ function DeleteContact(props) {
                     <div className="row phone-number">
                         {/*Phone number*/}
                         <div className="col">
-                        {contact.phones[0] != undefined ? contact.phones[0].number : null}
+                        {contact.phones[0] !== undefined ? contact.phones[0].number : null}
                         </div>
                     </div>
                     </div>

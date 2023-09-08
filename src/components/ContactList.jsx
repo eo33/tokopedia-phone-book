@@ -1,5 +1,4 @@
 import {useState,useEffect} from 'react';
-import Select from 'react-select';
 import { useQuery, gql } from '@apollo/client';
 import 'bootstrap/dist/css/bootstrap.css';
 import "./stylesheet.css"
@@ -58,7 +57,7 @@ function ContactList(props) {
       let modifiedData = data.contact.map(contact=>({...contact,isFav:false}))
       localStorage.setItem('contacts', JSON.stringify(modifiedData));
     }
-  }, [data]);
+  }, [data,error,loading]);
 
   // Set pagination function
   const [currentPage, setCurrentPage] = useState(1);
@@ -119,7 +118,7 @@ function ContactList(props) {
   let isFavorite = 0;
   let setFavroite = (id) => {
     let localContacts = JSON.parse(localStorage.getItem('contacts'))
-    let contactIndex = localContacts.findIndex(contact=>contact.id==id)
+    let contactIndex = localContacts.findIndex(contact=>contact.id===id)
     localContacts[contactIndex].isFav = !localContacts[contactIndex].isFav;
     localStorage.setItem('contacts',JSON.stringify(localContacts))
   }
@@ -180,7 +179,7 @@ function ContactList(props) {
                   <div className="row phone-number">
                     {/*Phone number*/}
                     <div className="col">
-                      {contact.phones[0] != undefined ? contact.phones[0].number : null}
+                      {contact.phones[0] !== undefined ? contact.phones[0].number : null}
                     </div>
                   </div>
                 </div>
@@ -200,13 +199,13 @@ function ContactList(props) {
           }
           <div className="row d-flex justify-content-center align-items-center button-style mt-4">
             <div className="col-auto">
-              <button onClick={prevPage} className={`button-style ${currentPage == 1 ? "button-disabled": ""}`}>
+              <button onClick={prevPage} className={`button-style ${currentPage === 1 ? "button-disabled": ""}`}>
                 <i className="fa-solid fa-chevron-left mx-0 px-0"></i>
               </button>
             </div>
             <div className="col-auto mx-0 px-0">{currentPage}</div>
             <div className="col-auto">
-              <button onClick={nextPage} className={`button-style ${currentPage == Math.ceil(data.contact.length/10) ? "button-disabled": ""}`}>
+              <button onClick={nextPage} className={`button-style ${currentPage === Math.ceil(data.contact.length/10) ? "button-disabled": ""}`}>
                 <i className="fa-solid fa-chevron-right mx-0 px-0"></i>
               </button>
             </div>

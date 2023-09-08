@@ -7,7 +7,7 @@ function FavoriteList(props) {
   
     useEffect(() => {
         const localStorageData = JSON.parse(localStorage.getItem('contacts'));
-        if (localStorageData != null){
+        if (localStorageData !== null){
             const newFav = localStorageData.filter((contact) => contact.isFav === true);
             setFavContacts(newFav);
         }
@@ -57,7 +57,7 @@ function FavoriteList(props) {
                   <div className="row phone-number">
                     {/*Phone number*/}
                     <div className="col">
-                      {contact.phones[0] != undefined ? contact.phones[0].number : null}
+                      {contact.phones[0] !== undefined ? contact.phones[0].number : null}
                     </div>
                   </div>
                 </div>

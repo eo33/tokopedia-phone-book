@@ -55,16 +55,15 @@ function AddContact(props) {
   
   // Validate unique name  
   
-  //let listOfNames = 
   const [uniqueName, setUniqueName] = useState(true)
 
   const contactNameHandler = (e) => {
     const name = e.target.value
     // Validate special characters
-    if(e.target.id == "first-name") {
+    if(e.target.id === "first-name") {
         name.match(specialCharacter) ? setValidateFirstName(false) : setValidateFirstName(true)
     } 
-    if(e.target.id == "last-name") {
+    if(e.target.id === "last-name") {
         name.match(specialCharacter) ? setValidateSecondName(false) : setValidateSecondName(true)
     } 
     //console.log(parsedStoredData)
@@ -80,7 +79,7 @@ function AddContact(props) {
         } else {
             setUniqueName(true)
         }
-    },[contactName])
+    },[contactName,listOfNames])
 
 
   // Seperate primary number and secondary number
