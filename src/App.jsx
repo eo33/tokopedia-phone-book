@@ -1,8 +1,9 @@
-import React,{useState} from 'react';
+import {useState} from 'react';
 import {ApolloClient, InMemoryCache,ApolloProvider} from '@apollo/client'
 import ContactList from './components/ContactList';
 import AddContact from './components/AddContact';
-import EditContact from './components/EditContact';
+import FavoriteList from './components/FavoriteList';
+import DeleteContact from './components/DeleteContact';
 
 function App() {
   const client = new ApolloClient({
@@ -10,11 +11,6 @@ function App() {
     uri: "https://wpe-hiring.tokopedia.net/graphql",
   })
 
-  // List of contacts
-  const [listOfContacts, setListOfContacts] = useState([]);
-  const editContacts = (elem) => {
-    setListOfContacts(elem)
-  }
 
   // Edit page
   const [editPage, setEditPage] = useState(false);
@@ -25,22 +21,47 @@ function App() {
     });
   }
 
+  //Fav page
+  const [favPage, setFavPage] = useState(false);
+  const showFavPage = () => {
+    setFavPage(prev => {
+      let result = !prev;
+      return result;
+    });
+  }
+
+  // Delete page 
+  const [delPage, setDelPage] = useState(false);
+  const showDelPage = () => {
+    setDelPage(prev => {
+      let result = !prev;
+      return result;
+    });
+  }
+
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={client}>      
       <div className="container">
         <div className="row">
-
         </div>
         <div className="row">
           <ContactList 
             showEditPage={showEditPage} 
-            show={!editPage} 
-            editContacts={editContacts}
+            showEdit={!editPage} 
+
+            showFavPage={showFavPage} 
+            showFav={!favPage} 
+
+            showDelPage={showDelPage} 
+            showDel={!delPage} 
           />
-          <EditContact/>
-          <AddContact showEditPage={showEditPage} show={editPage}/>
+          
+          <FavoriteList showFavPage={showFavPage} showFav={favPage}/>
+          <AddContact showEditPage={showEditPage} showEdit={editPage}/>
+          <DeleteContact showDelPage={showDelPage} showDel={delPage}/>
         </div>
       </div>
+      
   
     </ApolloProvider>
 

@@ -58,15 +58,11 @@
 }
 
 .add-contact{
-    border: solid 2px black;
-    border-radius: 20pt;
-    opacity: 0;
-    
-    animation: fadeInFromLeft 0.5s ease-in-out forwards;
+    animation: 0.5s fadeInFromLeft  ease-in-out forwards;
 }
 
 .contact-list{
-    animation: fadeIn 0.5s ease-in-out forwards;
+    animation: 0.5s fadeIn ease-in-out forwards;
 }
 
 .small-text{
@@ -108,4 +104,22 @@
 }
 .dummy{
     height: 1.5em !important;
+    opacity: 0;
+    pointer-events: none;
 }
+
+.delete{
+    color: red  !important;
+}
+
+.search-bar-disabled{
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/*Remove border from smaller screen*/
+@media (max-width: 768px) {
+    .add-contact {
+      border: 0px solid #ccc !important; /* You can adjust the border style, color, and width */
+    }
+  }

@@ -30,9 +30,17 @@ const ADD_CONTACT = gql`
 
 function AddContact(props) {
   // Show or hide the page
-  let { show, showEditPage } = props;
-  const storedData = localStorage.getItem('contacts');
-  const parsedStoredData = JSON.parse(storedData)
+  let { showEdit, showEditPage } = props;
+  const [listOfNames, setListOfNames] = useState([])
+
+  // Load data when component mounts after it has fetch from Apollo
+  useEffect(()=>{
+    const storedData = localStorage.getItem('contacts');
+    if(storedData != null){
+        const parsedStoredData = JSON.parse(storedData)
+        setListOfNames(parsedStoredData.map(contact=>(contact.first_name+contact.last_name)))
+    }
+},[showEdit])
 
   // Variables to store form data
   const [contactName, setContactName] = useState({
@@ -46,7 +54,8 @@ function AddContact(props) {
   const [validateSecondName, setValidateSecondName] = useState(true)
   
   // Validate unique name  
-  let listOfNames = parsedStoredData.map(contact=>(contact.first_name+contact.last_name))
+  
+  //let listOfNames = 
   const [uniqueName, setUniqueName] = useState(true)
 
   const contactNameHandler = (e) => {
@@ -58,12 +67,14 @@ function AddContact(props) {
     if(e.target.id == "last-name") {
         name.match(specialCharacter) ? setValidateSecondName(false) : setValidateSecondName(true)
     } 
+    //console.log(parsedStoredData)
     setContactName({ ...contactName, [e.target.name]: e.target.value });
     };
 
     // check if name is unique
     useEffect(()=>{ 
         let currentName = contactName.first_name+contactName.last_name
+
         if(listOfNames.includes(currentName)){
             setUniqueName(false)
         } else {
@@ -119,12 +130,12 @@ function AddContact(props) {
         setValidateSecondName(true)
         setUniqueName(true)
     })
-  }, [show]);
+  }, [showEdit]);
 
   return (
     <>
-      {show ? (
-        <form className="col-md-8 add-contact d-flex flex-column offset-md-2" onSubmit={handleSubmit}>
+      {showEdit ? (
+        <form className="col-md-8 add-contact d-flex flex-column offset-md-2 border rounded" onSubmit={handleSubmit}>
           <div className="row mt-4">
             <div className="col-2 px-4">
               <button
