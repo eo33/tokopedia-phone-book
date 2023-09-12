@@ -4,7 +4,7 @@ This repository contain the source file for a phone application project for Toko
 
 ## IMPORTANT!
 Please check my second attempt at this problem here:
-- Deployed site: eo33tokopedia2.netlify.app
+- Deployed site: https://eo33tokopedia2.netlify.app/
 - Repository: https://github.com/eo33/second-attempt-tokped
 
 The second attempt was made after the 1-week deadline given. 
