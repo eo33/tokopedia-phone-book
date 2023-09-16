@@ -7,7 +7,7 @@ Please check my second attempt at this problem here:
 - Deployed site: https://eo33tokopedia2.netlify.app/
 - Repository: https://github.com/eo33/second-attempt-tokped
 
-The second attempt was made after the 1-week deadline given. 
+The second attempt was made after the 1-week deadline. 
 
 ## Work progress
 - 04/09/2023 - Read through the problem, setup development environment and finished Figma design [(Link)](https://www.figma.com/file/vh2f3Rm6dr5TzVuK8gRjzv/Untitled?type=design&node-id=0%3A1&mode=design&t=yfhlskYjPseufGcl-1).
